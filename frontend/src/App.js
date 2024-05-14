@@ -91,7 +91,9 @@ const App = () => {
         <Route exact path="/password-reset" name=" Account Recovery" element={<ResetPassword />} />
         <Route
           path="/Dash/*"
-          element={isLogged ? <DefaultLayout userEmail={userEmail} /> : <Navigate to="/" />}
+          element={
+            isLogged && userEmail ? <DefaultLayout userEmail={userEmail} /> : <Navigate to="/" />
+          }
         />
       </Routes>
     </Suspense>
