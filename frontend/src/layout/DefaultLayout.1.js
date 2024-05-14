@@ -39,7 +39,7 @@ export const DefaultLayout = ({ setIsLogged, isLogged, userEmail }) => {
     }
 
     loadData()
-  }, [userEmail, dispatch])
+  }, [dispatch, userEmail])
 
   if (loading) {
     return (

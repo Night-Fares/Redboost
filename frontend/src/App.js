@@ -31,14 +31,11 @@ const App = () => {
     const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
     if (theme) {
       setColorMode(theme)
+    } else if (!isColorModeSet()) {
+      setColorMode(storedTheme)
     }
-
-    if (isColorModeSet()) {
-      return
-    }
-
-    setColorMode(storedTheme)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    // Make sure to include all dependencies that are used inside the effect and can change over time.
+  }, [isColorModeSet, setColorMode, storedTheme])
 
   useEffect(() => {
     const checkAuth = async () => {
