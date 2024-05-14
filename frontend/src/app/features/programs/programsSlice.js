@@ -53,6 +53,7 @@ export const loadPrograms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post('https://redboost-7d8t.onrender.com/loadPrograms')
+      console.log('response', response)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
