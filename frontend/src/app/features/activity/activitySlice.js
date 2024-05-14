@@ -5,7 +5,10 @@ export const createActivity = createAsyncThunk(
   'activity/addActivity',
   async (activityData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`http://localhost:5000/addActivity`, activityData)
+      const response = await axios.post(
+        `https://redboost-7d8t.onrender.com//addActivity`,
+        activityData,
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -18,7 +21,9 @@ export const deleteActivity = createAsyncThunk(
   'activity/deleteActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/deleteActivity/${activityId}`)
+      const response = await axios.delete(
+        `https://redboost-7d8t.onrender.com//deleteActivity/${activityId}`,
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -33,7 +38,7 @@ export const updateActivity = createAsyncThunk(
     try {
       const { activityId } = activityData
       const response = await axios.put(
-        `http://localhost:5000/updateActivity/${activityId}`,
+        `https://redboost-7d8t.onrender.com//updateActivity/${activityId}`,
         activityData,
       )
       return response.data
@@ -48,7 +53,9 @@ export const loadActivity = createAsyncThunk(
   'activity/loadActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`http://localhost:5000/loadActivity/${activityId}`)
+      const response = await axios.post(
+        `https://redboost-7d8t.onrender.com//loadActivity/${activityId}`,
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -62,7 +69,7 @@ export const loadActivitiesByProgramId = createAsyncThunk(
   async (programId, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/loadActivitiesByProgramId/${programId}`,
+        `https://redboost-7d8t.onrender.com//loadActivitiesByProgramId/${programId}`,
       )
       return response.data
     } catch (error) {
