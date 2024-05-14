@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-
+import axiosInstance from '../../../axiosInstance'
 export const loadTask = createAsyncThunk('task/loadTask', async (taskId, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`https://redboost-7d8t.onrender.com/loadTask/${taskId}`)
+    const response = await axiosInstance.post(
+      `https://redboost-7d8t.onrender.com/loadTask/${taskId}`,
+    )
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -14,7 +16,10 @@ export const createTask = createAsyncThunk(
   'task/createTask',
   async (taskData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`https://redboost-7d8t.onrender.com/createTask`, taskData)
+      const response = await axiosInstance.post(
+        `https://redboost-7d8t.onrender.com/createTask`,
+        taskData,
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -26,7 +31,9 @@ export const deleteTask = createAsyncThunk(
   'task/deleteTask',
   async (taskId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`https://redboost-7d8t.onrender.com/deleteTask/${taskId}`)
+      const response = await axiosInstance.delete(
+        `https://redboost-7d8t.onrender.com/deleteTask/${taskId}`,
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -36,7 +43,7 @@ export const deleteTask = createAsyncThunk(
 
 export const loadTasks = createAsyncThunk('task/loadTasks', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`https://redboost-7d8t.onrender.com/loadTasks`)
+    const response = await axiosInstance.post(`https://redboost-7d8t.onrender.com/loadTasks`)
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -47,7 +54,7 @@ export const loadTasksByActivityId = createAsyncThunk(
   'task/loadTasksByActivityId',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `https://redboost-7d8t.onrender.com/loadTasksByActivityId/${activityId}`,
       )
       return response.data

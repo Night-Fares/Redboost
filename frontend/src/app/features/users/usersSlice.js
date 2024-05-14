@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-
+import axiosInstance from '../../../axiosInstance'
 //load users
 export const loadUsers = createAsyncThunk('programs/loadUsers', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.post('https://redboost-7d8t.onrender.com/loadUsers')
+    const response = await axiosInstance.post('https://redboost-7d8t.onrender.com/loadUsers')
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)

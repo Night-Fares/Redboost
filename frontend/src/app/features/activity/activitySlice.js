@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-
+import axiosInstance from '../../../axiosInstance'
 export const createActivity = createAsyncThunk(
   'activity/addActivity',
   async (activityData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `https://redboost-7d8t.onrender.com/addActivity`,
         activityData,
       )
@@ -21,7 +20,7 @@ export const deleteActivity = createAsyncThunk(
   'activity/deleteActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(
+      const response = await axiosInstance.delete(
         `https://redboost-7d8t.onrender.com/deleteActivity/${activityId}`,
       )
       return response.data
@@ -37,7 +36,7 @@ export const updateActivity = createAsyncThunk(
   async (activityData, { rejectWithValue }) => {
     try {
       const { activityId } = activityData
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `https://redboost-7d8t.onrender.com/updateActivity/${activityId}`,
         activityData,
       )
@@ -53,7 +52,7 @@ export const loadActivity = createAsyncThunk(
   'activity/loadActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `https://redboost-7d8t.onrender.com/loadActivity/${activityId}`,
       )
       return response.data
@@ -68,7 +67,7 @@ export const loadActivitiesByProgramId = createAsyncThunk(
   'activity/loadActivitiesByProgramId',
   async (programId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `https://redboost-7d8t.onrender.com/loadActivitiesByProgramId/${programId}`,
       )
       return response.data

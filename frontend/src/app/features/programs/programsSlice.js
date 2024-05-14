@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-
+import axiosInstance from '../../../axiosInstance'
 export const createProgram = createAsyncThunk(
   'programs/addProgram',
   async (programData, { rejectWithValue }) => {
     try {
       console.log(programData)
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         'https://redboost-7d8t.onrender.com/addProgram',
         programData,
       )
@@ -23,7 +22,7 @@ export const deleteProgram = createAsyncThunk(
   'programs/deleteProgram',
   async (programId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(
+      const response = await axiosInstance.delete(
         `https://redboost-7d8t.onrender.com/deleteProgram/${programId}`,
       )
       return response.data
@@ -38,7 +37,7 @@ export const updateProgram = createAsyncThunk(
   async (programData, { rejectWithValue }) => {
     try {
       const { programId } = programData
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `https://redboost-7d8t.onrender.com/updateProgram/${programId}`,
         programData,
       )
@@ -53,7 +52,7 @@ export const loadPrograms = createAsyncThunk(
   'programs/loadPrograms',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://redboost-7d8t.onrender.com/loadPrograms')
+      const response = await axiosInstance.post('https://redboost-7d8t.onrender.com/loadPrograms')
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
