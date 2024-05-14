@@ -5,7 +5,7 @@ const router = express.Router();
 // Middleware to check if user is authenticated
 router.get("/login", (req, res) => {
   console.log(req.session.cookie);
-  if (req.session.id) {
+  if (req.session.email) {
     return res.json({
       authenticated: true,
       email: req.session.email,
