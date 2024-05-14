@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
@@ -25,14 +25,14 @@ import { handleLogin } from '../../../app/features/login/loginSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 import { setUserData } from '../../../app/features/userData/userData'
-const Login = ({ setIsLogged, isLogged }) => {
+import { setAuthentication } from '../../../app/features/auth/authSlice'
+const Login = () => {
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
-  const state = useSelector((state) => state.loginSlice)
-
+  const isLogged = useSelector((state) => state.auth.isLogged)
   const { values, handleChange, handleSubmit, touched, errors } = useFormik({
     initialValues: {
       email: '',
@@ -47,8 +47,7 @@ const Login = ({ setIsLogged, isLogged }) => {
           const { password, confirmation, _id, ...userDataWithoutPassword } = response.data.user
           setUserData(userDataWithoutPassword)
           setError('')
-          setIsLogged(true)
-          navigate('/Dash')
+          dispatch(setAuthentication(true))
         })
         .catch((error) => {
           if (error.response) {
@@ -62,16 +61,10 @@ const Login = ({ setIsLogged, isLogged }) => {
     dispatch(handleLogin({ key, value }))
   }, 250)
   useEffect(() => {
-    const timeout = setTimeout(console.log(state), 5000)
-    return () => {
-      clearTimeout(timeout)
+    if (isLogged) {
+      navigate('/dash')
     }
-  }, [state])
-  useEffect(() => {
-    if (isLogged === true) {
-      navigate('/Dash')
-    }
-  }, [])
+  }, [isLogged, navigate])
   return (
     <div
       className="min-vh-100 d-flex flex-row align-items-center"

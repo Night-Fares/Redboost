@@ -12,7 +12,7 @@ import { CProgress } from '@coreui/react'
 const USER_DATA_PROGRESS = 50
 const ALL_DATA_LOADED_PROGRESS = 100
 
-export const DefaultLayout = ({ setIsLogged, isLogged, userEmail }) => {
+export const DefaultLayout = ({ userEmail }) => {
   console.log('userEmail', userEmail)
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -56,13 +56,13 @@ export const DefaultLayout = ({ setIsLogged, isLogged, userEmail }) => {
     <div>
       <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
-        <AppHeader setIsLogged={setIsLogged} />
+        <AppHeader />
         <div className="body flex-grow-1">
           <AppContent />
         </div>
         <AppFooter />
       </div>
-      <ExpiryModal setIsLogged={setIsLogged} setModalOpen={setModalOpen} modalOpen={modalOpen} />
+      <ExpiryModal setModalOpen={setModalOpen} modalOpen={modalOpen} />
     </div>
   )
 }

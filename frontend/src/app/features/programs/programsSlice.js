@@ -8,7 +8,7 @@ export const createProgram = createAsyncThunk(
     try {
       console.log(programData)
       const response = await axios.post(
-        'https://redboost-7d8t.onrender.com//addProgram',
+        'https://redboost-7d8t.onrender.com/addProgram',
         programData,
       )
       return response.data
@@ -24,7 +24,7 @@ export const deleteProgram = createAsyncThunk(
   async (programId, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `https://redboost-7d8t.onrender.com//deleteProgram/${programId}`,
+        `https://redboost-7d8t.onrender.com/deleteProgram/${programId}`,
       )
       return response.data
     } catch (error) {
@@ -39,7 +39,7 @@ export const updateProgram = createAsyncThunk(
     try {
       const { programId } = programData
       const response = await axios.put(
-        `https://redboost-7d8t.onrender.com//updateProgram/${programId}`,
+        `https://redboost-7d8t.onrender.com/updateProgram/${programId}`,
         programData,
       )
       return response.data
@@ -53,7 +53,7 @@ export const loadPrograms = createAsyncThunk(
   'programs/loadPrograms',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://redboost-7d8t.onrender.com//loadPrograms')
+      const response = await axios.post('https://redboost-7d8t.onrender.com/loadPrograms')
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)

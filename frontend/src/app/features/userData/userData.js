@@ -5,7 +5,7 @@ export const loadUserData = createAsyncThunk(
   'userData/loadCurrentUser',
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://redboost-7d8t.onrender.com//loadCurrentUser', {
+      const response = await axios.post('https://redboost-7d8t.onrender.com/loadCurrentUser', {
         email: email,
       })
       return response.data

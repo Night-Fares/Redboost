@@ -6,7 +6,7 @@ export const createActivity = createAsyncThunk(
   async (activityData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://redboost-7d8t.onrender.com//addActivity`,
+        `https://redboost-7d8t.onrender.com/addActivity`,
         activityData,
       )
       return response.data
@@ -22,7 +22,7 @@ export const deleteActivity = createAsyncThunk(
   async (activityId, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `https://redboost-7d8t.onrender.com//deleteActivity/${activityId}`,
+        `https://redboost-7d8t.onrender.com/deleteActivity/${activityId}`,
       )
       return response.data
     } catch (error) {
@@ -38,7 +38,7 @@ export const updateActivity = createAsyncThunk(
     try {
       const { activityId } = activityData
       const response = await axios.put(
-        `https://redboost-7d8t.onrender.com//updateActivity/${activityId}`,
+        `https://redboost-7d8t.onrender.com/updateActivity/${activityId}`,
         activityData,
       )
       return response.data
@@ -54,7 +54,7 @@ export const loadActivity = createAsyncThunk(
   async (activityId, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://redboost-7d8t.onrender.com//loadActivity/${activityId}`,
+        `https://redboost-7d8t.onrender.com/loadActivity/${activityId}`,
       )
       return response.data
     } catch (error) {
@@ -69,7 +69,7 @@ export const loadActivitiesByProgramId = createAsyncThunk(
   async (programId, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://redboost-7d8t.onrender.com//loadActivitiesByProgramId/${programId}`,
+        `https://redboost-7d8t.onrender.com/loadActivitiesByProgramId/${programId}`,
       )
       return response.data
     } catch (error) {
