@@ -65,10 +65,9 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      domain: "https://redboost-7d8t.onrender.com",
-      secure: true,
+      secure: "auto",
       sameSite: "none",
-      httpOnly: true,
+      httpOnly: "auto",
       path: "/",
       maxAge: 24 * 60 * 60 * 1000,
       // maxAge: 30 * 1000,
