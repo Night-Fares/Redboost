@@ -64,6 +64,9 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
+      sameSite: "none",
+      domain: "redboost-1.onrender.com",
+      path: "/",
       secure: true, // Set to true if you're using https
       httpOnly: true, // Recommended to avoid XSS attacks
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
