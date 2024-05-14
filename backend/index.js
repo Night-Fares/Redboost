@@ -65,6 +65,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
+      domain: "https://redboost-7d8t.onrender.com",
       secure: true,
       sameSite: "none",
       httpOnly: true,
