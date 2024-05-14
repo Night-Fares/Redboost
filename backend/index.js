@@ -41,6 +41,7 @@ app.use(
     origin: "https://redboost-1.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 

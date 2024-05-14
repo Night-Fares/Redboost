@@ -43,6 +43,7 @@ const Login = () => {
       axiosInstance
         .post('/login', values)
         .then((response) => {
+          console.log('response', response)
           console.log('Authentication successful', response.data)
           const { password, confirmation, _id, ...userDataWithoutPassword } = response.data.user
           setUserData(userDataWithoutPassword)
