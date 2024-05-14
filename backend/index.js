@@ -38,7 +38,7 @@ app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requ
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://redboost-1.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
