@@ -64,11 +64,11 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      secure: true,
-      httpOnly: false,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "none",
-      // maxAge: 30 * 1000,
+      secure: true, // Set to true if you're using https
+      httpOnly: true, // Recommended to avoid XSS attacks
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "none", // Can be 'strict', 'lax', or 'none'. If 'none', you must set 'secure' to true.
+      path: "/", // Typically set to '/' to apply to the entire site
     },
   })
 );
