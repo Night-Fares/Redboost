@@ -77,7 +77,38 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Include your routes here
-
+// Routes
+app.post("/register", signupRoute);
+app.post("/login", loginRoute);
+app.post("/events", AddEvent);
+app.post("/forget-password", forgetPassword);
+app.get("/login", checkAuthRoute);
+app.get("/logout", logoutRoute);
+app.post("/loadCurrentUser", usersRoute);
+app.post("/loadUsers", usersRoute);
+app.get("/checkPass", checkPass);
+app.get("/events", getEvents);
+app.put("/users/:userId", UpdateUser);
+app.put("/events/:idEvent", UpdateEvent);
+app.delete("/events/:idEvent", deleteEvent);
+app.post("/addProgram", handleProgram);
+app.delete("/deleteProgram/:programId ", handleProgram);
+app.put("/updateProgram/:programId", handleProgram);
+app.post("/loadPrograms", handleProgram);
+app.post("/addActivity", handleActivity);
+app.delete("/deleteActivity/:activityId", handleActivity);
+app.put("/updateActivity/:activityId", handleActivity);
+app.post("/loadActivity/:activityId", handleActivity);
+app.post("/loadActivitiesByProgramId/:programId", handleActivity);
+app.post("/createntrepreneurs", hundleEntrepreneur);
+app.post("/createstartup", handleStartups);
+app.get("/loadAllentrepreneurs", hundleEntrepreneur);
+app.post("/addTask", handleTask);
+app.post("/loadTask/:taskId", handleTask);
+app.delete("/deleteTask/:taskId", handleTask);
+app.put("/updateTask/:taskId", handleTask);
+app.post("/loadTasks", handleTask);
+app.post("/loadTasksByActivityId/:activityId", handleTask);
 // Database + Server Connection Validation
 mongoose
   .connect(db)
