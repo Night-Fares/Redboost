@@ -3,13 +3,12 @@ const express = require("express");
 const session = require("express-session");
 const MongoDBSession = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser"); // Import body-parser
 const passport = require("passport");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const db = process.env.DATABASE_URI;
 const secret = process.env.SECRET;
-const PORT = process.env.PORT || 10000; //this is can be changed careful with it !!!!!!!!!!
+const PORT = process.env.PORT || 10000;
 const app = express();
 const signupRoute = require("./routes/api/register");
 const loginRoute = require("./routes/api/login");
@@ -28,14 +27,14 @@ const handleActivity = require("./routes/api/handleActivity");
 const hundleEntrepreneur = require("./routes/api/hundleEntrepreneur");
 const handleStartups = require("./routes/api/handleStartups");
 const handleTask = require("./routes/api/handleTask");
+
+// You can require your routes here
+
 require("./passport/index");
 
-// Increase payload size limit for body-parser
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requests
 
 app.use(
   cors({
@@ -50,7 +49,7 @@ const store = new MongoDBSession({
   uri: db,
   collection: "sessions",
 });
-// Add event listeners to the store
+
 store.on("connected", () => {
   console.log("Session store connected!");
 });
@@ -58,6 +57,7 @@ store.on("connected", () => {
 store.on("error", (error) => {
   console.error("Session store error:", error);
 });
+
 app.use(
   session({
     key: "sessionId",
@@ -66,58 +66,18 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
+      sameSite: "none",
       secure: true,
-      sameSite: "None",
-      httpOnly: true,
-      path: "/",
       maxAge: 24 * 60 * 60 * 1000,
-      // maxAge: 30 * 1000,
     },
   })
 );
 
-app.use((req, res, next) => {
-  res.on("finish", () => {
-    console.log("Set-Cookie:", res.getHeader("Set-Cookie"));
-  });
-  next();
-});
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
-app.post("/register", signupRoute);
-app.post("/login", loginRoute);
-app.post("/events", AddEvent);
-app.post("/forget-password", forgetPassword);
-app.get("/login", checkAuthRoute);
-app.get("/logout", logoutRoute);
-app.post("/loadCurrentUser", usersRoute);
-app.post("/loadUsers", usersRoute);
-app.get("/checkPass", checkPass);
-app.get("/events", getEvents);
-app.put("/users/:userId", UpdateUser);
-app.put("/events/:idEvent", UpdateEvent);
-app.delete("/events/:idEvent", deleteEvent);
-app.post("/addProgram", handleProgram);
-app.delete("/deleteProgram/:programId ", handleProgram);
-app.put("/updateProgram/:programId", handleProgram);
-app.post("/loadPrograms", handleProgram);
-app.post("/addActivity", handleActivity);
-app.delete("/deleteActivity/:activityId", handleActivity);
-app.put("/updateActivity/:activityId", handleActivity);
-app.post("/loadActivity/:activityId", handleActivity);
-app.post("/loadActivitiesByProgramId/:programId", handleActivity);
-app.post("/createntrepreneurs", hundleEntrepreneur);
-app.post("/createstartup", handleStartups);
-app.get("/loadAllentrepreneurs", hundleEntrepreneur);
-app.post("/addTask", handleTask);
-app.post("/loadTask/:taskId", handleTask);
-app.delete("/deleteTask/:taskId", handleTask);
-app.put("/updateTask/:taskId", handleTask);
-app.post("/loadTasks", handleTask);
-app.post("/loadTasksByActivityId/:activityId", handleTask);
+// Include your routes here
+
 // Database + Server Connection Validation
 mongoose
   .connect(db)
