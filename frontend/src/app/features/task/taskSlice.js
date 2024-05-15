@@ -4,7 +4,7 @@ import axiosInstance from '../../../axiosInstance'
 export const loadTask = createAsyncThunk('task/loadTask', async (taskId, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post(
-      `https://redboost-7d8t.onrender.com/loadTask/${taskId}`,
+      `https://redboost-3kgg.onrender.com/loadTask/${taskId}`,
     )
     return response.data
   } catch (error) {
@@ -17,7 +17,7 @@ export const createTask = createAsyncThunk(
   async (taskData, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `https://redboost-7d8t.onrender.com/createTask`,
+        `https://redboost-3kgg.onrender.com/createTask`,
         taskData,
       )
       return response.data
@@ -32,7 +32,7 @@ export const deleteTask = createAsyncThunk(
   async (taskId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
-        `https://redboost-7d8t.onrender.com/deleteTask/${taskId}`,
+        `https://redboost-3kgg.onrender.com/deleteTask/${taskId}`,
       )
       return response.data
     } catch (error) {
@@ -43,7 +43,7 @@ export const deleteTask = createAsyncThunk(
 
 export const loadTasks = createAsyncThunk('task/loadTasks', async (_, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post(`https://redboost-7d8t.onrender.com/loadTasks`)
+    const response = await axiosInstance.post(`https://redboost-3kgg.onrender.com/loadTasks`)
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
@@ -55,7 +55,7 @@ export const loadTasksByActivityId = createAsyncThunk(
   async (activityId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `https://redboost-7d8t.onrender.com/loadTasksByActivityId/${activityId}`,
+        `https://redboost-3kgg.onrender.com/loadTasksByActivityId/${activityId}`,
       )
       return response.data
     } catch (error) {
