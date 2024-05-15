@@ -28,7 +28,6 @@ const handleActivity = require("./routes/api/handleActivity");
 const hundleEntrepreneur = require("./routes/api/hundleEntrepreneur");
 const handleStartups = require("./routes/api/handleStartups");
 const handleTask = require("./routes/api/handleTask");
-const { MongoDBStore } = require("connect-mongodb-session");
 require("./passport/index");
 
 // Increase payload size limit for body-parser
@@ -47,6 +46,10 @@ app.use(
   })
 );
 
+const store = new MongoDBSession({
+  uri: db,
+  collection: "sessions",
+});
 // Add event listeners to the store
 store.on("connected", () => {
   console.log("Session store connected!");
@@ -61,18 +64,14 @@ app.use(
     secret: secret,
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({
-      mongoUrl: db,
-      ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks),
-      autoRemove: "native",
-      collectionName: "sessions",
-      mongoOptions: {
-        useUnifiedTopology: true,
-      },
-    }),
+    store: store,
     cookie: {
-      sameSite: "None",
       secure: true,
+      sameSite: "None",
+      httpOnly: true,
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
+      // maxAge: 30 * 1000,
     },
   })
 );
