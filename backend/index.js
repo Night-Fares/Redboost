@@ -61,11 +61,14 @@ app.use(
     secret: secret,
     resave: false,
     saveUninitialized: false,
-    store: new MongoDBStore({
-      uri: db,
-      collection: "sessions",
-      expires: 24 * 60 * 60 * 1000,
-      // expires: 30 * 1000,
+    store: new MongoStore({
+      mongoUrl: db,
+      ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks),
+      autoRemove: "native",
+      collectionName: "sessions",
+      mongoOptions: {
+        useUnifiedTopology: true,
+      },
     }),
     cookie: {
       sameSite: "None",
