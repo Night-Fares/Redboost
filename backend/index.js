@@ -75,9 +75,10 @@ app.use(
   })
 );
 
-// enable the "secure" flag on the sessionCookies object
 app.use((req, res, next) => {
-  req.session.cookie.secure = true;
+  res.on("finish", () => {
+    console.log("Set-Cookie:", res.getHeader("Set-Cookie"));
+  });
   next();
 });
 
