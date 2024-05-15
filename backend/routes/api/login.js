@@ -1,3 +1,8 @@
+const express = require("express");
+const passport = require("passport");
+
+const router = express.Router();
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("login", (error, user, info) => {
     if (error) {
@@ -24,3 +29,5 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
+module.exports = router;
