@@ -3,30 +3,32 @@ const passport = require("passport");
 
 const router = express.Router();
 
-router.post("/login", (req, res, next) => {
-  passport.authenticate("login", (error, user, info) => {
-    if (error) {
-      return res.status(500).json({
-        message: "Something is wrong logging in",
-        error: error.message || "internal server error",
-      });
-    }
-    if (!user) {
-      return res.status(401).json(info);
-    }
-    req.login(user, (error) => {
+router.post("/login", async (req, res, next) => {
+  passport.authenticate("login", async (error, user, info) => {
+    console.log("req user", req.user);
+    console.log("req session", req.session);
+    try {
       if (error) {
         return res.status(500).json({
           message: "Something is wrong logging in",
-          error: error.message || "internal server error",
+          error: error || "internal server errror",
         });
       }
-      req.session.email = user.email; // Assuming user object has an email field
-      req.session.save(() => {
-        // Ensure the session is saved before sending the response
-        return res.json({ user, info });
+
+      //req.login is provided by passport to serilize user id
+      req.login(user, async (error) => {
+        if (error) {
+          res.status(500).json({
+            message: "Something is wrong logging in",
+            error: error || "internal server errror",
+          });
+        }
+        req.session.email = user.email;
+        return res.send({ user, info });
       });
-    });
+    } catch (error) {
+      return next(error);
+    }
   })(req, res, next);
 });
 
