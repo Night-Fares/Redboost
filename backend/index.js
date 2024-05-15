@@ -28,10 +28,12 @@ const handleActivity = require("./routes/api/handleActivity");
 const hundleEntrepreneur = require("./routes/api/hundleEntrepreneur");
 const handleStartups = require("./routes/api/handleStartups");
 const handleTask = require("./routes/api/handleTask");
+const { MongoDBStore } = require("connect-mongodb-session");
 require("./passport/index");
 
 // Increase payload size limit for body-parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requests
@@ -45,10 +47,6 @@ app.use(
   })
 );
 
-const store = new MongoDBSession({
-  uri: db,
-  collection: "sessions",
-});
 // Add event listeners to the store
 store.on("connected", () => {
   console.log("Session store connected!");
@@ -63,14 +61,15 @@ app.use(
     secret: secret,
     resave: false,
     saveUninitialized: false,
-    store: store,
+    store: new MongoDBStore({
+      uri: db,
+      collection: "sessions",
+      expires: 24 * 60 * 60 * 1000,
+      // expires: 30 * 1000,
+    }),
     cookie: {
-      secure: true,
       sameSite: "None",
-      httpOnly: true,
-      path: "/",
-      maxAge: 24 * 60 * 60 * 1000,
-      // maxAge: 30 * 1000,
+      secure: true,
     },
   })
 );
