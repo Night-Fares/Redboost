@@ -36,7 +36,7 @@ router.post('/addTask', async (req, res) => {
     )
 
     // Respond with data
-    res.status(200).json({ message: 'Task created successfully', task: savedTask })
+    res.status(200).json(savedTask)
   } catch (error) {
     // Handle errors
     console.error('Failed to create task:', error)

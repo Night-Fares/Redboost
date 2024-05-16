@@ -1,16 +1,23 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Task from './Task'
 import Activity from './Activity'
 import { Routes, Route } from 'react-router-dom'
+import { loadTasksByActivityId } from '../../app/features/task/taskSlice'
+import { useDispatch, useSelector } from 'react-redux'
 export default function TaskRoutes({ activity }) {
+  const dispatch = useDispatch()
+  const tasks = useSelector((state) => state.task.tasksByActivityId)
+  useEffect(() => {
+    dispatch(loadTasksByActivityId(activity._id))
+  }, [dispatch, activity._id])
   return (
     <Routes>
-      <Route path={`/`} element={<Activity key={activity._id} activity={activity} />} />
-      {activity.tasks.map((task) => (
+      <Route path={`/`} element={<Activity activity={activity}  tasks={tasks} />} />
+      {tasks.map((task) => (
         <Route
           key={task._id}
-          path={`${task.name}/*`}
-          element={<Task key={task._id} task={task} />}
+          path={`${task.taskName}/*`}
+          element={<Task task={task} />}
         />
       ))}
     </Routes>

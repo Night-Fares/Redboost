@@ -30,34 +30,15 @@ function EditTask({ visible, setVisible, selectedTask, setSelectedtask }) {
             id="taskTitle"
             placeholder="Task Title"
             aria-describedby="taskTitleHelpInline"
-            value={selectedTask.title}
+            value={selectedTask.taskName}
           />
         </div>
         <div className="mb-3">
-          <CFormTextarea
-            id="taskDescription"
-            placeholder="Description"
-            rows={3}
-            value={selectedTask.description}
-          />
-        </div>
-        <div className="mb-3">
-          <CFormSelect value={selectedTask.priority} id="taskPriority" name="taskPriority">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </CFormSelect>
-        </div>
-        <div className="mb-3">
-          <CFormInput type="date" id="taskDate" placeholder="Task Date" value={selectedTask.date} />
-        </div>
-        <div className="mb-3">
-          <h5>Attachments</h5>
-          <Uploader selectedTask={selectedTask} setSelectedtask={setSelectedtask} />
+          <CFormInput type="date" id="taskDate" placeholder="Task Date" value={selectedTask.targetDate} />
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton color="danger">Remove</CButton>
+        <CButton color="danger">cancel</CButton>
         <CButton color="primary">Save</CButton>
       </CModalFooter>
     </CModal>

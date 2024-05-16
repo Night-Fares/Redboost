@@ -7,12 +7,26 @@ import {
   CModalFooter,
   CButton,
   CFormInput,
-  CFormTextarea,
+  CInputGroup,
+  CFormSelect,
 } from '@coreui/react'
 import { useSelector } from 'react-redux'
+const formatDate = (date) => {
+  let month = '' + (date.getMonth() + 1), // getMonth() is zero-based
+      day = '' + date.getDate(),
+      year = date.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+};
+
 function AddTask({ open, setOpen, handleAddTask }) {
   const [taskName, setTaskName] = useState('')
-  const [targetDate, setTargetDate] = useState(new Date())
+  const [targetDate, setTargetDate] = useState(formatDate(new Date())); 
   const [taskOwner, setTaskOwner] = useState('')
   const users = useSelector((state) => state.usersSlice.users)
   return (
@@ -28,6 +42,8 @@ function AddTask({ open, setOpen, handleAddTask }) {
         </CModalHeader>
         <CModalBody>
           <CFormInput
+          label="Task Name:"
+          className="mb-3"
             type="text"
             id="name"
             name="name"
@@ -36,7 +52,8 @@ function AddTask({ open, setOpen, handleAddTask }) {
             onChange={(e) => setTaskName(e.target.value)}
           />
           <CFormInput
-            label="Target Day:"
+          className="mb-3"
+            label="Target Date:"
             type="date"
             id="TargetDay"
             name="TargetDate"

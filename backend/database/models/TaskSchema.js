@@ -27,6 +27,26 @@ const kpiSchema = new mongoose.Schema({
   },
 })
 
+const commentSchema = new mongoose.Schema({
+    commentId: {
+      type: String,
+      required: true,
+    },
+    commenter: {
+      type: String,
+      required: true, 
+    },
+    comment: {
+      type: String,
+      required: true, 
+    },
+    commentedAt: {
+      type: Date,
+      default: Date.now, 
+    },
+  
+})
+
 const taskSchema = new mongoose.Schema({
   taskName: {
     type: String,
@@ -38,7 +58,7 @@ const taskSchema = new mongoose.Schema({
   },
   xpPoints: {
     type: Number,
-    required: true,
+
   },
   status: {
     type: String,
@@ -50,17 +70,37 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  resources: [fileSchema],
-  deliverables: [fileSchema],
-  kpis: [kpiSchema],
-  reportingSection: [kpiSchema], //
+  resources: {
+    type: [fileSchema],
+    default: [],
+  },
+  deliverables: {
+    type: [fileSchema],
+
+    default: [],
+  },
+  kpis: {
+    type: [kpiSchema],
+   
+    default: [],
+  },
+  reports: {
+    type: [kpiSchema],
+   
+    default: [],
+  },
   activityId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Activity',
     required: true,
   },
-})
+  comments: {
+    type: [commentSchema],
+    default: [], 
+  },
+});
+
 
 module.exports = mongoose.model('Task', taskSchema)
 
-// const Task = mongoose.model('Task', taskSchema)
+

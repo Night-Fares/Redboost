@@ -11,10 +11,10 @@ export const loadTask = createAsyncThunk('task/loadTask', async (taskId, { rejec
 })
 
 export const createTask = createAsyncThunk(
-  'task/createTask',
+  'task/addTask',
   async (taskData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`http://localhost:5000/createTask`, taskData)
+      const response = await axios.post(`http://localhost:5000/addTask`, taskData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -55,6 +55,18 @@ export const loadTasksByActivityId = createAsyncThunk(
   },
 )
 
+export const updateTask = createAsyncThunk(
+  'task/updateTask',
+  async ({ taskId, taskData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/updateTask/${taskId}`, taskData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const taskSLice = createSlice({
   name: 'task',
   initialState: {
@@ -62,7 +74,7 @@ const taskSLice = createSlice({
     status: 'idle',
     error: null,
     tasksByActivityId: [],
-    task: {}, //when loading a single task
+    task: {}, //when dealing with a single task
   },
   extraReducers: (builder) => {
     builder
@@ -79,6 +91,7 @@ const taskSLice = createSlice({
       .addCase(createTask.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.allTasks.push(action.payload)
+        state.tasksByActivityId.push(action.payload)
       })
       .addCase(createTask.rejected, (state, action) => {
         state.status = 'failed'
@@ -89,12 +102,38 @@ const taskSLice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.allTasks = state.allTasks.filter((task) => task._id !== action.payload._id)
+        state.tasksByActivityId = state.tasksByActivityId.filter(
+          (task) => task._id !== action.payload._id,
+        )
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
       .addCase(deleteTask.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.task = action.payload
+        state.status = 'succeeded'
+        state.allTasks = state.allTasks.map((task) => {
+          if (task._id === action.payload._id) {
+            return action.payload
+          }
+          return task
+        })
+        state.tasksByActivityId = state.tasksByActivityId.map((task) => {
+          if (task._id === action.payload._id) {
+            return action.payload
+          }
+          return task
+        })
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(updateTask.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(loadTask.fulfilled, (state, action) => {

@@ -16,27 +16,29 @@ import {
   CPaginationItem,
 } from '@coreui/react'
 import { HiMagnifyingGlassCircle } from 'react-icons/hi2'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CChart } from '@coreui/react-chartjs'
 import { FaCircle, FaCirclePlus } from 'react-icons/fa6'
 import CIcon from '@coreui/icons-react'
 import { cilCalendar } from '@coreui/icons'
 import EditTask from './EditTask'
 import TaskView from './TaskView'
-
-function Activity({ activity }) {
+import AddTask from './AddTask'
+import { createTask } from '../../app/features/task/taskSlice'
+import {useNavigate} from 'react-router-dom'
+function Activity({ activity ,tasks}) {
+  const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
   const [open, setOpen] = useState(false)
   const [selectedTask, setSelectedtask] = useState(null)
-  const [tasks, setTasks] = useState(activity.tasks)
-
+  const [addModalVisible, setAddModalVisible] = useState(false)
   const itemsPerPage = 4
   const [currentPage, setCurrentPage] = useState(1)
-
+  
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentTasks = tasks.slice(indexOfFirstItem, indexOfLastItem)
-
+  
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
@@ -54,23 +56,26 @@ function Activity({ activity }) {
       setCurrentPage(currentPage + 1)
     }
   }
-  const getPriorityColor = (priority) => {
-    if (priority === 'Low') {
-      return 'text-success' // Green color for low priority
-    } else if (priority === 'Medium') {
-      return 'text-warning' // Yellow color for medium priority
-    } else if (priority === 'High') {
-      return 'text-danger' // Red color for high priority
-    } else {
-      return '' // Default color (if priority is not recognized)
-    }
-  }
+  
 
-  const addTask = () => {}
+  const handleAddTask = (Data) => {
+    const taskData = {
+      ...Data,
+      xpPoints: 0,
+      resources: [],
+      deliverables: [],
+      kpis: [],
+      status: 'inProgress',
+      activityId: activity._id,
+    }
+    console.log(taskData)
+    dispatch(createTask(taskData))
+    setAddModalVisible(false)
+  }
   const getValidTasks = () => {
     let nb = 0
     tasks.map((task) => {
-      if (task.status === 'Valid') {
+      if (task.status === 'valid') {
         nb++
       }
     })
@@ -79,7 +84,7 @@ function Activity({ activity }) {
   const getProgressTasks = () => {
     let nb = 0
     tasks.map((task) => {
-      if (task.status === 'In Progress') {
+      if (task.status === 'inProgress') {
         nb++
       }
     })
@@ -98,13 +103,16 @@ function Activity({ activity }) {
     setSelectedtask(task)
     setVisible(true)
   }
-  const handleOpen = (task) => {
-    setSelectedtask(task)
-    setOpen(true)
+  const handleViewTask = (task) => {
+    const currentPath  = window.location.pathname
+    navigate(`${currentPath}/${task.taskName}`)
   }
 
   return (
+    <>
+    {addModalVisible && <AddTask setOpen={setAddModalVisible} open={addModalVisible} handleAddTask={handleAddTask} />}
     <CContainer style={{ padding: '20px' }} className="mt-4">
+      
       {selectedTask && (
         <EditTask
           visible={visible}
@@ -127,31 +135,27 @@ function Activity({ activity }) {
               }}
               className="text-light"
             >
-              In Progress <FaCirclePlus onClick={() => addTask('In Progress')} />
+              In Progress <FaCirclePlus onClick={() => setAddModalVisible(true)} />
             </CCardHeader>
             <CCardBody style={{ overflow: 'auto' }}>
               {tasks.map((task, index) => {
-                if (task.status === 'To Do') {
+                if (task.status === 'inProgress') {
                   return (
-                    <div className="container">
+                    <div key={task._id} className="container">
                       <div
                         onClick={() => handleModalVisibility(task)}
                         key={index}
                         className="card border border-danger shadow mb-3"
                         style={{ maxWidth: '400px' }}
                       >
-                        <div className="card-header">
-                          <strong>{task.title}</strong>
+                        <div className="card-header"> 
+                          <strong>{task.taskName}</strong>
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title text-danger">{task.description}</h5>
-                          <p className={`card-text ${getPriorityColor(task.priority)}`}>
-                            <span className="text-dark">Priority:</span> {task.priority}
-                          </p>
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div className="text-muted">
                               <CIcon icon={cilCalendar} className="mr-1" />
-                              {task.date}
+                              {task.targetDate}
                             </div>
                           </div>
                         </div>
@@ -178,7 +182,7 @@ function Activity({ activity }) {
             </CCardHeader>
             <CCardBody style={{ overflow: 'auto' }}>
               {tasks.map((task, index) => {
-                if (task.status === 'In Progress') {
+                if (task.status === 'Completed') {
                   return (
                     <div className="container">
                       <div
@@ -188,17 +192,14 @@ function Activity({ activity }) {
                         style={{ maxWidth: '400px' }}
                       >
                         <div className="card-header">
-                          <strong>{task.title}</strong>
+                          <strong>{task.taskName}</strong>
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title text-warning">{task.description}</h5>
-                          <p className={`card-text ${getPriorityColor(task.priority)}`}>
-                            <span className="text-dark">Priority:</span> {task.priority}
-                          </p>
+                    
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div className="text-muted">
                               <CIcon icon={cilCalendar} className="mr-1" />
-                              {task.date}
+                              {task.targetDate}
                             </div>
                           </div>
                         </div>
@@ -225,7 +226,7 @@ function Activity({ activity }) {
             </CCardHeader>
             <CCardBody style={{ overflow: 'auto' }}>
               {tasks.map((task, index) => {
-                if (task.status === 'Done') {
+                if (task.status === 'valid') {
                   return (
                     <div className="container">
                       <div
@@ -235,17 +236,14 @@ function Activity({ activity }) {
                         style={{ maxWidth: '400px' }}
                       >
                         <div className="card-header">
-                          <strong>{task.title}</strong>
+                          <strong>{task.taskName}</strong>
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title text-success">{task.description}</h5>
-                          <p className={`card-text ${getPriorityColor(task.priority)}`}>
-                            <span className="text-dark">Priority:</span> {task.priority}
-                          </p>
+                    
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div className="text-muted">
                               <CIcon icon={cilCalendar} className="mr-1" />
-                              {task.date}
+                              {task.targetDate}
                             </div>
                           </div>
                         </div>
@@ -266,8 +264,8 @@ function Activity({ activity }) {
               <CTable striped responsive className="text-center">
                 <CTableHead>
                   <CTableRow>
-                    <CTableHeaderCell scope="col">Release Date</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Task</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Target  Date</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Task Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                     <CTableHeaderCell scope="col">View</CTableHeaderCell>
                   </CTableRow>
@@ -275,21 +273,22 @@ function Activity({ activity }) {
                 <CTableBody>
                   {currentTasks.map((task, index) => (
                     <CTableRow key={index}>
-                      <CTableDataCell>{task.date}</CTableDataCell>
-                      <CTableDataCell>{task.title}</CTableDataCell>
+                      <CTableDataCell>{task.targetDate}</CTableDataCell>
+                      <CTableDataCell>{task.taskName}</CTableDataCell>
                       <CTableDataCell>
-                        {task.status === 'To Do' ? (
+                        {task.status === 'inProgress' ? (
                           <span className="badge text-bg-danger">{task.status}</span>
-                        ) : task.status === 'In Progress' ? (
+                        ) : task.status === 'completed' ? (
                           <span className="badge text-bg-warning">{task.status}</span>
-                        ) : task.status === 'Done' ? (
+                        ) : task.status === 'valid' ? (
                           <span className="badge text-bg-success">{task.status}</span>
                         ) : null}
                       </CTableDataCell>
                       <CTableDataCell>
                         <HiMagnifyingGlassCircle
+                          role='button'
                           style={{ fontSize: '25px', color: '#4CAF50' }}
-                          onClick={() => handleOpen(task)}
+                          onClick={() => handleViewTask(task)}
                         />
                       </CTableDataCell>
                     </CTableRow>
@@ -329,8 +328,9 @@ function Activity({ activity }) {
                       backgroundColor: ['#1ca1c1', '#8664c6', '#fcbf1e', '#5ac18e'],
                       data: [
                         tasks.length,
-                        getCompletedTasks(),
+                       
                         getProgressTasks(),
+                        getCompletedTasks(),
                         getValidTasks(),
                       ],
                     },
@@ -370,6 +370,7 @@ function Activity({ activity }) {
         </CCol>
       </CRow>
     </CContainer>
+    </>
   )
 }
 

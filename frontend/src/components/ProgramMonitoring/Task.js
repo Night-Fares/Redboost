@@ -11,43 +11,78 @@ import {
   CFormInput,
 } from '@coreui/react'
 
-/*const taskExample = {
-  _id: 1,
-  taskName: 'Task 1',
-  taskOwner: 'Owner 1',
-  targetDate: '2024-05-20',
-  status: 'inProgress',
-  resources: [
-    { _id: 1, url: 'resource1.pdf', fileName: 'Resource 1' },
-    { _id: 2, url: 'resource2.pdf', fileName: 'Resource 2' },
-  ],
-  deliverables: [
-    { _id: 1, url: 'deliverable1.pdf', fileName: 'Deliverable 1' },
-    { _id: 2, url: 'deliverable2.pdf', fileName: 'Deliverable 2' },
-  ],
-  kpis: [
-    { _id: 1, label: 'KPI 1', value: 'Value 1' },
-    { _id: 2, label: 'KPI 2', value: 'Value 2' },
-  ],
-  reportingSection: { title: '', text: '' },
-  comment: '',
-}*/
-
+import { updateTask } from '../../app/features/task/taskSlice'
+import {useDispatch, useSelector} from 'react-redux'
 const Task = ({ task }) => {
+  const dispatch = useDispatch()
+  const [currentTask, setCurrentTask] = useState(task)
   const [newKpiLabel, setNewKpiLabel] = useState('')
   const [newKpiValue, setNewKpiValue] = useState('')
   const [newDeliverableName, setNewDeliverableName] = useState('')
   const [newRapportTitle, setNewRapportTitle] = useState('')
   const [newRapportText, setNewRapportText] = useState('')
   const [newComment, setNewComment] = useState('')
+  const [resourceFile, setResourceFile] = useState(null)
+  const [resourceFileName, setResourceFileName] = useState('')
+  const [deliverableFile, setDeliverableFile] = useState(null)
 
-  const handleAddKpi = (taskIndex) => {}
 
-  const handleAddDeliverable = (taskIndex) => {}
+  const handleAddKpi = () => {
+    const updatedTask = {
+      ...task,
+      kpis: [...task.kpis, { label: newKpiLabel, count: newKpiValue }],
+    }
+    dispatch(
+      updateTask({
+        taskId: task._id,
+        taskData: updatedTask
+      })
+    )
+    setCurrentTask(updatedTask)
+  }
 
-  const handleAddRapport = (taskIndex) => {}
+  const handleAddDeliverable = () => {
 
-  const handleAddComment = (taskIndex) => {}
+    const updatedTask = {
+      ...task,
+       deliverables: [...task.deliverables, { fileName: newDeliverableName ? newDeliverableName : deliverableFile.name,fileUrl: deliverableFile }],
+    }
+    dispatch(
+      updateTask({
+        taskId: task._id,
+        taskData: updatedTask
+      })
+    )
+    setCurrentTask(updatedTask)
+   
+
+  }
+
+  const handleAddRapport = () => {
+    const updatedTask = {
+      ...task,
+    reports: [...task.reports, { label: newRapportTitle, count: newRapportText }],
+    }
+    dispatch(
+      updateTask({
+        taskId: task._id,
+        taskData: updatedTask
+      })
+    )
+    setCurrentTask(updatedTask)
+  }
+
+  const handleAddComment = () => {
+    dispatch(
+      updateTask({
+        taskId: task._id,
+        taskData: {
+          ...task,
+          comments: [...task.comments, { text: newComment }],
+        }
+      })
+    )
+  }
 
   return (
     <>
@@ -56,18 +91,18 @@ const Task = ({ task }) => {
           <CCard>
             <CCardHeader>Task Details</CCardHeader>
             <CCardBody>
-              <div key={task._id}>
+              <div >
                 <p>
-                  <strong>Task Name:</strong> {task.taskName}
+                  <strong>Task Name:</strong> {currentTask.taskName}
                 </p>
                 <p>
-                  <strong>Task Owner:</strong> {task.taskOwner}
+                  <strong>Task Owner:</strong> {currentTask.taskOwner}
                 </p>
                 <p>
-                  <strong>Target Date:</strong> {task.targetDate}
+                  <strong>Target Date:</strong> {currentTask.targetDate}
                 </p>
                 <p>
-                  <strong>Status:</strong> {task.status}
+                  <strong>Status:</strong> {currentTask.status}
                 </p>
               </div>
             </CCardBody>
@@ -77,11 +112,11 @@ const Task = ({ task }) => {
           <CCard>
             <CCardHeader>Resources</CCardHeader>
             <CCardBody>
-              <div key={task._id}>
-                <h5>{task.taskName} Resources:</h5>
+              <div>
+                <h5>{currentTask.taskName} Resources:</h5>
                 <CListGroup>
-                  {task.resources.map((resource) => (
-                    <CListGroupItem key={resource._id}>
+                  {currentTask.resources.map((resource, index) => (
+                    <CListGroupItem key={index}>
                       <CButton href={resource.url} download color="link">
                         {resource.fileName}
                       </CButton>
@@ -97,13 +132,13 @@ const Task = ({ task }) => {
       <CCard className="mt-3 mb-3">
         <CCardHeader>Sections</CCardHeader>
         <CCardBody>
-          <CCard key={task._id} className="mt-3 mb-3">
+          <CCard  className="mt-3 mb-3">
             <CCardHeader>KPIs</CCardHeader>
             <CCardBody>
               <CListGroup>
-                {task.kpis.map((kpi) => (
-                  <CListGroupItem key={kpi._id}>
-                    <strong>{kpi.label}:</strong> {kpi.value}
+                {currentTask.kpis.map((kpi, index) => (
+                  <CListGroupItem  key={index}>
+                    <strong>{kpi.label}:</strong> {kpi.count}
                   </CListGroupItem>
                 ))}
                 <CListGroupItem>
@@ -125,7 +160,7 @@ const Task = ({ task }) => {
                   />
                   <CButton
                     color="primary"
-                    onClick={() => handleAddKpi(task._id - 1)}
+                    onClick={() => handleAddKpi()}
                     className="mt-3 mb-3"
                   >
                     Add KPI
@@ -135,12 +170,12 @@ const Task = ({ task }) => {
             </CCardBody>
           </CCard>
 
-          <CCard key={task._id} className="mt-3 mb-3">
+          <CCard  className="mt-3 mb-3">
             <CCardHeader>Documents</CCardHeader>
             <CCardBody>
               <CListGroup>
-                {task.deliverables.map((deliverable) => (
-                  <CListGroupItem key={deliverable._id}>
+                {currentTask.deliverables.map((deliverable, index) => (
+                  <CListGroupItem key={index}>
                     <CButton href={deliverable.url} download color="link">
                       {deliverable.fileName}
                     </CButton>
@@ -157,8 +192,8 @@ const Task = ({ task }) => {
                   <label htmlFor="newDeliverableFile" className="mt-3 mb-3">
                     Upload File:
                   </label>
-                  <input id="newDeliverableFile" type="file" />
-                  <CButton color="primary" onClick={() => handleAddDeliverable(task._id - 1)}>
+                  <input id="newDeliverableFile" type="file"  onChange={(e) => setDeliverableFile(e.target.files[0])}/>
+                  <CButton color="primary" onClick={() => handleAddDeliverable()}>
                     Add Deliverable
                   </CButton>
                 </CListGroupItem>
@@ -166,8 +201,17 @@ const Task = ({ task }) => {
             </CCardBody>
           </CCard>
 
-          <CCard key={task._id} className="mt-3 mb-3">
+          <CCard  className="mt-3 mb-3">
             <CCardHeader>Reporting Section</CCardHeader>
+            <CListGroup>
+                {currentTask.reports.map((report, index) => (
+                  <CListGroupItem key={index}>
+                   <div>{report.label}</div>
+                   <div>{report.count}</div>
+                  </CListGroupItem>
+                ))}
+            </CListGroup>
+              
             <CCardBody>
               <CFormInput
                 placeholder="Title"
@@ -183,7 +227,7 @@ const Task = ({ task }) => {
               />
               <CButton
                 color="primary"
-                onClick={() => handleAddRapport(task._id - 1)}
+                onClick={() => handleAddRapport()}
                 className="mt-3 mb-3"
               >
                 Add Reporting Section
@@ -191,7 +235,7 @@ const Task = ({ task }) => {
             </CCardBody>
           </CCard>
 
-          <CCard key={task._id} className="mt-3 mb-3">
+          <CCard  className="mt-3 mb-3">
             <CCardHeader>Comment Section</CCardHeader>
             <CCardBody>
               <CFormInput
@@ -201,7 +245,7 @@ const Task = ({ task }) => {
               />
               <CButton
                 color="primary"
-                onClick={() => handleAddComment(task._id - 1)}
+                onClick={() => handleAddComment()}
                 className="mt-3 mb-3"
               >
                 Add Comment
