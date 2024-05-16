@@ -18,7 +18,7 @@ export const loadEntrepreneurs = createAsyncThunk(
 const entrepreneursSlice = createSlice({
   name: 'entrepreneurs',
   initialState: {
-    list: [],
+    entrepreneurs: [],
     status: 'idle',
     error: null,
   },
@@ -30,7 +30,7 @@ const entrepreneursSlice = createSlice({
       })
       .addCase(loadEntrepreneurs.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.list = action.payload;
+        state.entrepreneurs = action.payload;
       })
       .addCase(loadEntrepreneurs.rejected, (state, action) => {
         state.status = 'failed';

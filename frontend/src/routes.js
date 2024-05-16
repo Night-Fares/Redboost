@@ -9,7 +9,6 @@ const allContacts = React.lazy(() => import('./views/contacts/AllContact'))
 const ProgramCards = React.lazy(() => import('./components/ProgramMonitoring/ProgramCards'))
 const MainDatabaseManager = React.lazy(() => import('./views/dataBaseManager/MainDatabaseManager'))
 const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
-const CreateStartup = React.lazy(() => import('./views/contacts/CreateStartup'))
 const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
   { path: '/Dash', exact: true, name: 'Home', element: Dashboard },
@@ -25,7 +24,6 @@ const routes = [
   { path: '/events', name: 'All events', element: Events },
   { path: '/CreateEvent', name: 'Create Events', element: CreateEvents },
   { path: '/CreateContact', name: 'Create Contact', element: CreateContact },
-  { path: '/CreateStartup', name: 'Create Startup', element: CreateStartup },
   { path: '/allContacts', name: 'All Contacts', element: allContacts },
   { path: '/Contacts/EntrepConacts', name: 'Entrepreneurs Contacts', element: EntrepConacts },
 ]
