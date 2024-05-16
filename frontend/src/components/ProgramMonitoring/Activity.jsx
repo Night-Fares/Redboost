@@ -66,18 +66,7 @@ function Activity({ activity }) {
     }
   }
 
-  const addTask = (type) => {
-    const newTask = {
-      title: `Task-${tasks.length}`,
-      description: 'New Card',
-      priority: 'Low',
-      status: type,
-      date: new Date().toISOString(), // Convert date to ISO string
-      uploadFiles: [],
-    }
-
-    setTasks([newTask, ...tasks])
-  }
+  const addTask = () => {}
   const getValidTasks = () => {
     let nb = 0
     tasks.map((task) => {
