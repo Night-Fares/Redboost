@@ -23,15 +23,19 @@ import {
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import axiosInstance from '../../axiosInstance'
-import { useSelector } from 'react-redux'
-const AppHeaderDropdown = ({ setIsLogged }) => {
+import { useSelector, useDispatch } from 'react-redux'
+import { setAuthentication } from '../../app/features/auth/authSlice'
+
+const AppHeaderDropdown = () => {
+  const dispatch = useDispatch()
   const userData = useSelector((state) => state.userData.userData)
   const navigate = useNavigate()
   const handleLogout = async () => {
     try {
       await axiosInstance.get('/logout').then((res) => {
         if (res.data) {
-          setIsLogged(false)
+          console.log('log out')
+          dispatch(setAuthentication(false))
           navigate('/')
         }
       })
@@ -100,9 +104,9 @@ const AppHeaderDropdown = ({ setIsLogged }) => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem onClick={handleLogout}>
-          <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+        <CDropdownItem onClick={handleLogout} role="button">
+          <CIcon icon={cilLockLocked} className="me-2 cursor-pointer" />
+          Log out
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

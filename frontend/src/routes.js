@@ -12,7 +12,7 @@ const CreateContact = React.lazy(() => import('./views/contacts/CreateContact'))
 const CreateStartup = React.lazy(() => import('./views/contacts/CreateStartup'))
 const routes = [
   { path: '/', exact: true, name: 'Home', element: Dashboard },
-  { path: '/Dash', exact: true, name: 'Dashboard', element: Dashboard },
+  { path: '/Dash', exact: true, name: 'Home', element: Dashboard },
   { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
   { path: '/user', name: 'User', element: User },
   { path: '/Database', name: 'Database Manager', element: MainDatabaseManager },
@@ -21,6 +21,7 @@ const routes = [
     name: 'Program Monitoring',
     element: ProgramCards,
   },
+
   { path: '/events', name: 'All events', element: Events },
   { path: '/CreateEvent', name: 'Create Events', element: CreateEvents },
   { path: '/CreateContact', name: 'Create Contact', element: CreateContact },

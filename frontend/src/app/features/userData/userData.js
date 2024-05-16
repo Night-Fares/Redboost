@@ -4,12 +4,9 @@ export const loadUserData = createAsyncThunk(
   'userData/loadCurrentUser',
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
-        'https://redboost-3kgg.onrender.com/loadCurrentUser',
-        {
-          email: email,
-        },
-      )
+      const response = await axiosInstance.post('http://localhost:5000/loadCurrentUser', {
+        email: email,
+      })
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -23,7 +20,7 @@ const userDataSlice = createSlice({
   },
   reducers: {
     setUserData: (state, action) => {
-      return { ...state, ...action.payload }
+      state.userData = action.payload
     },
   },
   extraReducers: (builder) => {

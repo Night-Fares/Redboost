@@ -10,6 +10,7 @@ import ResetPassword from './components/ResetPassword'
 import { setEvents } from './app/features/events/events'
 import { setAuthentication } from './app/features/auth/authSlice'
 import { Link, useNavigate } from 'react-router-dom'
+import { loadUserData } from './app/features/userData/userData'
 // import ProtectedRoute from './ProtectedRoute'
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -21,16 +22,13 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
-  console.log('render ya3tic 3asba')
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const storedTheme = useSelector((state) => state.theme)
   const [loading, setLoading] = useState(true)
-  const [userEmail, setUserEmail] = useState('')
   const isLogged = useSelector((state) => state.auth.isLogged)
-  console.log('isLogged', isLogged)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  /*  useEffect(() => {
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.href.split('?')[1])
     const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
     if (theme) {
@@ -39,7 +37,7 @@ const App = () => {
       setColorMode(storedTheme)
     }
     // Make sure to include all dependencies that are used inside the effect and can change over time.
-  }, [isColorModeSet, setColorMode, storedTheme])*/
+  }, [isColorModeSet, setColorMode, storedTheme])
 
   useEffect(() => {
     console.log('useEffect render')
@@ -49,7 +47,7 @@ const App = () => {
         console.log('response data', response.data)
         if (response.data.authenticated) {
           console.log('authenticated success')
-          setUserEmail(response.data.email)
+          dispatch(loadUserData(response.data.email))
           dispatch(setAuthentication(true))
         } else {
           dispatch(setAuthentication(false))
@@ -89,10 +87,7 @@ const App = () => {
         <Route exact path="/*" name="Page 404" element={<Page404 />} />
         <Route exact path="/500" name="Page 500" element={<Page500 />} />
         <Route exact path="/password-reset" name=" Account Recovery" element={<ResetPassword />} />
-        <Route
-          path="/Dash/*"
-          element={isLogged ? <DefaultLayout userEmail={userEmail} /> : <Navigate to="/" />}
-        />
+        <Route path="/Dash/*" element={isLogged ? <DefaultLayout /> : <Navigate to="/" />} />
       </Routes>
     </Suspense>
   )

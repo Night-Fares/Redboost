@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
@@ -33,6 +33,7 @@ const Login = () => {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const isLogged = useSelector((state) => state.auth.isLogged)
+  console.log('is logged login', isLogged)
   const { values, handleChange, handleSubmit, touched, errors } = useFormik({
     initialValues: {
       email: '',
@@ -46,7 +47,7 @@ const Login = () => {
           console.log('response', response)
           console.log('Authentication successful', response.data)
           const { password, confirmation, _id, ...userDataWithoutPassword } = response.data.user
-          setUserData(userDataWithoutPassword)
+          dispatch(setUserData(userDataWithoutPassword))
           setError('')
           dispatch(setAuthentication(true))
         })

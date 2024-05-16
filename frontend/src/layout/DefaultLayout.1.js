@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components'
-import axiosInstance from '../axiosInstance'
 import ExpiryModal from './ExpiryModal'
 import { useDispatch } from 'react-redux'
 import { loadPrograms } from '../app/features/programs/programsSlice'
 import { loadUsers } from '../app/features/users/usersSlice'
-import { loadUserData } from '../app/features/userData/userData'
 import { loadTasks } from '../app/features/task/taskSlice'
 import { CProgress } from '@coreui/react'
 
-const USER_DATA_PROGRESS = 50
-const ALL_DATA_LOADED_PROGRESS = 100
+const LOAD_PROGRAMS_PROGRESS = 33
+const LOAD_USERS_PROGRESS = 66
+const LOAD_TASKS_PROGRESS = 100
 
-export const DefaultLayout = ({ userEmail }) => {
-  console.log('userEmail', userEmail)
+export const DefaultLayout = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [progress, setProgress] = useState(0)
@@ -24,12 +22,13 @@ export const DefaultLayout = ({ userEmail }) => {
     const loadData = async () => {
       try {
         setLoading(true)
-        setProgress(USER_DATA_PROGRESS)
-        await dispatch(loadUserData(userEmail))
 
-        await Promise.all([dispatch(loadPrograms()), dispatch(loadUsers()), dispatch(loadTasks())])
-
-        setProgress(ALL_DATA_LOADED_PROGRESS)
+        dispatch(loadPrograms())
+        setProgress(LOAD_PROGRAMS_PROGRESS)
+        dispatch(loadUsers())
+        setProgress(LOAD_USERS_PROGRESS)
+        dispatch(loadTasks())
+        setProgress(LOAD_TASKS_PROGRESS)
       } catch (error) {
         console.error('An error occurred while loading data:', error)
         // Optionally set an error state here
@@ -39,7 +38,7 @@ export const DefaultLayout = ({ userEmail }) => {
     }
 
     loadData()
-  }, [dispatch, userEmail])
+  }, [dispatch])
 
   if (loading) {
     return (

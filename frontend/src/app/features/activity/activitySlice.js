@@ -4,10 +4,7 @@ export const createActivity = createAsyncThunk(
   'activity/addActivity',
   async (activityData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
-        `https://redboost-3kgg.onrender.com/addActivity`,
-        activityData,
-      )
+      const response = await axiosInstance.post(`http://localhost:5000/addActivity`, activityData)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -21,7 +18,7 @@ export const deleteActivity = createAsyncThunk(
   async (activityId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
-        `https://redboost-3kgg.onrender.com/deleteActivity/${activityId}`,
+        `http://localhost:5000/deleteActivity/${activityId}`,
       )
       return response.data
     } catch (error) {
@@ -37,7 +34,7 @@ export const updateActivity = createAsyncThunk(
     try {
       const { activityId } = activityData
       const response = await axiosInstance.put(
-        `https://redboost-3kgg.onrender.com/updateActivity/${activityId}`,
+        `http://localhost:5000/updateActivity/${activityId}`,
         activityData,
       )
       return response.data
@@ -52,9 +49,7 @@ export const loadActivity = createAsyncThunk(
   'activity/loadActivity',
   async (activityId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
-        `https://redboost-3kgg.onrender.com/loadActivity/${activityId}`,
-      )
+      const response = await axiosInstance.post(`http://localhost:5000/loadActivity/${activityId}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)
@@ -68,7 +63,7 @@ export const loadActivitiesByProgramId = createAsyncThunk(
   async (programId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `https://redboost-3kgg.onrender.com/loadActivitiesByProgramId/${programId}`,
+        `http://localhost:5000/loadActivitiesByProgramId/${programId}`,
       )
       return response.data
     } catch (error) {

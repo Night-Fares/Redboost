@@ -9,7 +9,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const db = process.env.DATABASE_URI;
 const secret = process.env.SECRET;
-const PORT = process.env.PORT || 10000; //this is can be changed careful with it !!!!!!!!!!
+const PORT = process.env.PORT || 5000; //this is can be changed careful with it !!!!!!!!!!
 const app = express();
 const signupRoute = require("./routes/api/register");
 const loginRoute = require("./routes/api/login");
@@ -38,7 +38,7 @@ app.use(bodyParser.json({ limit: "50mb" })); // Set a higher limit for JSON requ
 
 app.use(
   cors({
-    origin: "https://redboost-1.onrender.com",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -64,9 +64,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      domain: ".onrender.com",
-      secure: true,
-      sameSite: "none",
+      secure: false,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       // maxAge: 30 * 1000,

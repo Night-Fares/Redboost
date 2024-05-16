@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   CCard,
   CCardBody,
@@ -47,19 +47,26 @@ const UserProfile = () => {
               <CTable>
                 <CTableBody>
                   {user && user.logs && user.logs.length > 0 ? (
-                    // Render logs only if user and user.logs are not undefined
                     user.logs.map((log, index) => (
-                      <CAlert key={index} color={getColorByIndex(index)}>
-                        {log.date} :{' '}
-                        {log.events.map((event, eventIndex) => (
-                          <span style={{ backgroundColor: 'transparent' }} key={eventIndex}>
-                            {event}
-                          </span>
-                        ))}
-                      </CAlert>
+                      <tr key={index}>
+                        <td>
+                          <CAlert color={getColorByIndex(index)}>
+                            {log.date} :{' '}
+                            {log.events.map((event, eventIndex) => (
+                              <span style={{ backgroundColor: 'transparent' }} key={eventIndex}>
+                                {event}
+                              </span>
+                            ))}
+                          </CAlert>
+                        </td>
+                      </tr>
                     ))
                   ) : (
-                    <CAlert color="warning">No logs found.</CAlert>
+                    <tr>
+                      <td>
+                        <CAlert color="warning">No logs found.</CAlert>
+                      </td>
+                    </tr>
                   )}
                 </CTableBody>
               </CTable>
